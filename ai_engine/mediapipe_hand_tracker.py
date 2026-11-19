@@ -120,8 +120,8 @@ class MediaPipeHandTracker:
                         annotated_frame,
                         hand_landmarks,
                         self.mp_hands.HAND_CONNECTIONS,
-                        self.mp_drawing_styles.get_default_hand_landmarks_style(),
-                        self.mp_drawing_styles.get_default_hand_connections_style(),
+                        self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2, circle_radius=3),
+                        self.mp_drawing.DrawingSpec(color=(0, 255, 0), thickness=2),
                     )
 
                 landmarks.extend(

@@ -89,6 +89,9 @@ class FrameProcessor:
 
         return {
             'sos_score': round(model_result.score, 4),
+            'hand_landmarks': self.mediapipe_sos_detector.last_landmarks,
+            'frame_width': frame_width,
+            'frame_height': frame_height,
             'sos_label': model_result.label,
             'sos_stable_seconds': round(model_result.stable_seconds, 2),
             'sos_bbox': self._normalize_bbox(model_result.bbox, frame_width, frame_height),

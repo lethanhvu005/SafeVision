@@ -17,6 +17,7 @@ import {
 import { apiClient } from '../../api/client';
 import { AlertBanner } from '../../components/AlertBanner';
 import { CameraPanel } from '../../components/CameraPanel';
+import { HandSkeleton } from '../../components/HandSkeleton';
 import { EventTable, type EventTableColumn } from '../../components/EventTable';
 import { MetricBar } from '../../components/MetricBar';
 import { StatCard } from '../../components/StatCard';
@@ -24,6 +25,9 @@ import { cx, toneChip, type UiTone } from '../../components/ui';
 import { getApiErrorMessage } from '../../utils/apiError';
 
 interface AiState {
+  hand_landmarks?: import('../../components/HandSkeleton').HandPoint[];
+  frame_width?: number;
+  frame_height?: number;
   ear: number;
   mar: number;
   head_pitch: number;
@@ -922,7 +926,7 @@ export function DashboardPage() {
       const targetWidth = 480;
       const scale = targetWidth / video.videoWidth;
       canvas.width = targetWidth;
-      canvas.height = Math.max(270, Math.round(video.videoHeight * scale));
+      canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
       const context = canvas.getContext('2d');
       if (!context) {
         throw new Error('Không khởi tạo được vùng vẽ ảnh');
@@ -936,6 +940,7 @@ export function DashboardPage() {
       setAiError(null);
     } catch (error: unknown) {
       setAiError(getApiErrorMessage(error, 'Không xử lý được dữ liệu AI từ webcam'));
+      setAiState((previous) => ({ ...previous, hand_landmarks: [] }));
     } finally {
       isInferRunningRef.current = false;
     }
@@ -1521,6 +1526,11 @@ export function DashboardPage() {
         sosLoading={isSendingSos}
         sosEmergency={hasDangerAlert || sosEmergencyActive}
         mirrorVideo
+        mirroredOverlay={cameraReady && !aiError ? <HandSkeleton
+          points={aiState.hand_landmarks ?? []}
+          width={aiState.frame_width ?? 480}
+          height={aiState.frame_height ?? 270}
+        /> : null}
         footer={cameraFooter}
         overlay={
           <div className="pointer-events-none absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-[24px] border border-white/10 bg-slate-950/60 px-4 py-3 text-white backdrop-blur">

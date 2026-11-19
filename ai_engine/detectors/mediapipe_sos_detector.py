@@ -26,6 +26,7 @@ class MediaPipeSosDetector:
         self.sequence_started_at: float | None = None
         self.active_handedness: str | None = None
         self.tracker_error: str | None = None
+        self.last_landmarks: list[dict[str, Any]] = []
 
         try:
             # MediaPipe handedness is most stable on selfie-style frames, which
@@ -227,6 +228,7 @@ class MediaPipeSosDetector:
         return self._build_result(stage=self.current_stage, bbox=bbox, handedness=handedness, now=now)
 
     def predict(self, frame) -> MediaPipeSosResult:
+        self.last_landmarks = []
         if self.tracker is None:
             return MediaPipeSosResult(
                 label='no_sos',
@@ -239,6 +241,12 @@ class MediaPipeSosDetector:
             )
 
         tracking_result = self.tracker.process_frame(frame, draw=False)
+        # Convert selfie coordinates back to the original camera frame.
+        self.last_landmarks = [
+            {'hand_index': point['hand_index'], 'landmark_id': point['landmark_id'],
+             'x': 1.0 - point['x'], 'y': point['y']}
+            for point in tracking_result.get('landmarks', [])
+        ]
         grouped_landmarks = self._group_landmarks_by_hand(tracking_result.get('landmarks', []))
         handedness_map = self._handedness_map(tracking_result.get('handedness', []))
         now = monotonic()
