@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from backend.app.core.config import get_settings
 from backend.app.models.email_log import EmailLog
+from backend.app.services.google_mail import send_google_mail
 
 settings = get_settings()
 
@@ -37,7 +38,7 @@ class EmailService:
         db.refresh(log)
 
         try:
-            if not settings.smtp_username or not settings.smtp_password:
+            if settings.email_provider == 'smtp' and (not settings.smtp_username or not settings.smtp_password):
                 raise RuntimeError('SMTP credentials missing')
 
             message = EmailMessage()
@@ -59,11 +60,16 @@ class EmailService:
                         filename=file_path.name,
                     )
 
-            with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=15) as smtp:
-                if settings.smtp_use_tls:
-                    smtp.starttls()
-                smtp.login(settings.smtp_username, settings.smtp_password)
-                smtp.send_message(message)
+            if settings.email_provider == 'google_apps_script':
+                send_google_mail(settings, message)
+            elif settings.email_provider == 'smtp':
+                with smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=15) as smtp:
+                    if settings.smtp_use_tls:
+                        smtp.starttls()
+                    smtp.login(settings.smtp_username, settings.smtp_password)
+                    smtp.send_message(message)
+            else:
+                raise ValueError('EMAIL_PROVIDER không hợp lệ')
 
             log.status = 'sent'
             log.sent_at = datetime.now(timezone.utc)

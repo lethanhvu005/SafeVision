@@ -20,6 +20,9 @@ class Settings(BaseSettings):
     smtp_password: str = ''
     smtp_from: str = 'noreply@example.com'
     smtp_use_tls: bool = True
+    email_provider: str = 'smtp'
+    google_script_url: str = ''
+    google_script_secret: str = ''
     default_agency_email: str = 'default-agency@example.com'
     storage_path: str = 'storage'
     sos_model_path: str = 'bestSOS.pt'

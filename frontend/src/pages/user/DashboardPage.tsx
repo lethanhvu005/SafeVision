@@ -17,7 +17,7 @@ import {
 import { apiClient } from '../../api/client';
 import { AlertBanner } from '../../components/AlertBanner';
 import { CameraPanel } from '../../components/CameraPanel';
-import { HandSkeleton } from '../../components/HandSkeleton';
+import { LiveHandSkeleton } from '../../components/LiveHandSkeleton';
 import { EventTable, type EventTableColumn } from '../../components/EventTable';
 import { MetricBar } from '../../components/MetricBar';
 import { StatCard } from '../../components/StatCard';
@@ -1185,7 +1185,7 @@ export function DashboardPage() {
       const confirmed = await apiClient.post('/sos/confirm', {
         sos_id: trigger.data.id,
         confirmed: true,
-      });
+      }, { timeout: 35000 });
       const finalStatus = String(confirmed.data.status ?? '');
       const isSent = finalStatus === 'sent' || finalStatus === 'confirmed';
 
@@ -1526,11 +1526,7 @@ export function DashboardPage() {
         sosLoading={isSendingSos}
         sosEmergency={hasDangerAlert || sosEmergencyActive}
         mirrorVideo
-        mirroredOverlay={cameraReady && !aiError ? <HandSkeleton
-          points={aiState.hand_landmarks ?? []}
-          width={aiState.frame_width ?? 480}
-          height={aiState.frame_height ?? 270}
-        /> : null}
+        mirroredOverlay={cameraReady ? <LiveHandSkeleton videoRef={videoRef} /> : null}
         footer={cameraFooter}
         overlay={
           <div className="pointer-events-none absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-[24px] border border-white/10 bg-slate-950/60 px-4 py-3 text-white backdrop-blur">
