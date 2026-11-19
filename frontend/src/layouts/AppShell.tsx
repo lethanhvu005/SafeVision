@@ -34,7 +34,7 @@ export function AppShell() {
             { to: '/app/admin/manage', label: 'Quản trị dữ liệu', icon: Settings2 },
           ]
         : [
-            { to: '/app', label: 'Dashboard', icon: LayoutDashboard },
+            { to: '/app', label: 'Tổng quan', icon: LayoutDashboard },
             { to: '/app/profile', label: 'Hồ sơ', icon: UserRound },
             { to: '/app/history', label: 'Lịch sử', icon: History },
           ],
@@ -59,7 +59,7 @@ export function AppShell() {
                 </Link>
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.34em] text-slate-300">
-                    Driver Safety AI
+                    SafeVision · An toàn trên mọi hành trình
                   </p>
                   <h1 className="mt-1 font-display text-2xl font-semibold text-white md:text-3xl">
                     {isAdmin ? 'Trung tâm quản trị hệ thống' : 'Trung tâm giám sát người lái'}
@@ -102,6 +102,7 @@ export function AppShell() {
                 type="button"
                 onClick={() => setMobileOpen((value) => !value)}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/10 text-white lg:hidden"
+                aria-expanded={mobileOpen}
                 aria-label={mobileOpen ? 'Đóng menu' : 'Mở menu'}
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -113,10 +114,10 @@ export function AppShell() {
                 Vai trò: {isAdmin ? 'Quản trị viên' : 'Tài xế'}
               </span>
               <span className="rounded-full border border-white/10 bg-white/[0.08] px-3 py-1.5">
-                Route hiện tại: {location.pathname}
+                {links.find((link) => link.to === location.pathname)?.label ?? 'Không gian làm việc'}
               </span>
               <span className="rounded-full border border-white/10 bg-white/[0.08] px-3 py-1.5">
-                Chế độ: realtime monitoring
+                Giám sát an toàn người lái
               </span>
             </div>
 

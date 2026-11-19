@@ -12,6 +12,8 @@ services:
     envVars:
       - key: APP_ENV
         value: production
+      - key: AI_LOW_MEMORY
+        value: "true"
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL

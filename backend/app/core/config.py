@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     default_agency_email: str = 'default-agency@example.com'
     storage_path: str = 'storage'
     sos_model_path: str = 'bestSOS.pt'
+    ai_low_memory: bool = False
     log_level: str = 'INFO'
     frontend_origin: str = 'http://localhost:5173'
 

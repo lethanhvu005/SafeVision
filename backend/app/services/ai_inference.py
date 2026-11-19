@@ -18,7 +18,7 @@ class AiInferenceService:
     def __init__(self) -> None:
         settings = get_settings()
         self.output_path = Path(settings.storage_path) / 'logs' / 'last_ai_state.json'
-        self.processor = FrameProcessor(settings.sos_model_path)
+        self.processor = FrameProcessor(settings.sos_model_path, low_memory=settings.ai_low_memory)
         self.lock = Lock()
         self.last_logged_state: dict[int, dict[str, float | int]] = {}
 
@@ -79,10 +79,12 @@ class AiInferenceService:
 
 
 _service: AiInferenceService | None = None
+_service_lock = Lock()
 
 
 def get_ai_inference_service() -> AiInferenceService:
     global _service
-    if _service is None:
-        _service = AiInferenceService()
+    with _service_lock:
+        if _service is None:
+            _service = AiInferenceService()
     return _service

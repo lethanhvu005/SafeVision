@@ -58,7 +58,8 @@ body {
 }
 
 .card {
-  @apply rounded-[32px] border border-white/70 bg-white/70 shadow-panel backdrop-blur-xl;
+  @apply rounded-[24px] border border-slate-200 bg-white;
+  box-shadow: 0 4px 24px rgba(15, 35, 55, 0.045);
 }
 
 .metric-badge {
@@ -66,7 +67,7 @@ body {
 }
 
 .primary-btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-2xl bg-ink px-5 py-3 font-semibold text-white shadow-panel transition hover:-translate-y-0.5 hover:bg-navy;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-teal-700 px-5 py-3 font-semibold text-white transition hover:bg-teal-800;
 }
 
 .ghost-btn {
@@ -282,4 +283,44 @@ html.theme-night [class*='border-white/10'] {
 html.theme-night [class*='hover:bg-white/75']:hover,
 html.theme-night [class*='hover:bg-white']:hover {
   background-color: rgba(30, 41, 59, 0.92) !important;
+}
+
+/* SafeVision shared visual system */
+body { background-image: linear-gradient(150deg, #f0f6f8, #f7f9fc 60%, #edf5f5); }
+:focus-visible { outline: 3px solid #0d9488; outline-offset: 4px; }
+button:disabled { opacity: .65; cursor: wait; transform: none; }
+input[type='checkbox'] { accent-color: #0f766e; }
+.stat-card { min-height: 180px; border-top: 3px solid #0f766e; }
+.login-story { padding: 36px; color: #123047; }
+.login-brand { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 750; letter-spacing: -1px; color: #0f766e; }
+.login-eyebrow { display: block; margin-top: 44px; font-size: 12px; font-weight: 700; letter-spacing: .14em; color: #526c7a; }
+.login-story h1 { margin: 20px 0; font-size: clamp(36px, 4.2vw, 58px); line-height: 1.18; font-weight: 750; letter-spacing: -.045em; }
+.login-story h1 span { color: #0f766e; }
+.login-story > p { max-width: 490px; font-size: 17px; line-height: 1.8; color: #526778; }
+.journey-art { position: relative; height: 190px; margin: 26px 0; overflow: hidden; border-radius: 24px; background: #102e40; }
+.journey-road { position: absolute; width: 150px; height: 400px; left: 45%; top: -110px; transform: rotate(34deg); border: 2px solid #48827e; background: #193e4e; }
+.journey-road:after { content: ''; position: absolute; height: 100%; left: 50%; border-left: 3px dashed #80c8bc; }
+.journey-car { position: absolute; top: 64px; left: 48%; display: grid; place-items: center; width: 60px; height: 72px; border: 1px solid #80c8bc; border-radius: 18px; color: #b7f5df; background: #0e655f; box-shadow: 0 0 0 18px #51d4ba12, 0 0 0 38px #51d4ba08; }
+.journey-caption { position: absolute; left: 22px; bottom: 20px; color: #b3cbd2; font-size: 11px; letter-spacing: .16em; }
+.login-features { display: grid; gap: 20px; }
+.login-features > div { display: flex; align-items: center; gap: 14px; }
+.login-features svg { color: #0f766e; flex-shrink: 0; }
+.login-features strong, .login-features small { display: block; }
+.login-features strong { font-size: 15px; }
+.login-features small { margin-top: 3px; font-size: 14px; color: #526778; }
+.login-form { box-shadow: 0 24px 65px #153f5010; }
+.login-form > div:first-child { border-radius: 18px; }
+html.theme-night .login-story { color: #e2e8f0; }
+html.theme-night .login-story h1 span, html.theme-night .login-brand, html.theme-night .login-features svg { color: #5eead4; }
+html.theme-night .login-story > p, html.theme-night .login-features small, html.theme-night .login-eyebrow { color: #a5b8ca; }
+@media (max-width: 1023px) {
+  .login-story { padding: 12px 8px; max-width: 576px; margin: auto; width: 100%; }
+  .login-eyebrow { margin-top: 22px; }
+  .login-story h1 { font-size: 36px; }
+  .journey-art, .login-features { display: none; }
+  .login-story > p { font-size: 15px; }
+  .login-page > div { gap: 16px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
 }

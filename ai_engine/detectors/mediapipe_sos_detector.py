@@ -20,7 +20,7 @@ class MediaPipeSosResult:
 
 
 class MediaPipeSosDetector:
-    def __init__(self, sequence_timeout_seconds: float = 3.0):
+    def __init__(self, sequence_timeout_seconds: float = 3.0, lightweight: bool = False):
         self.sequence_timeout_seconds = sequence_timeout_seconds
         self.current_stage = 0
         self.sequence_started_at: float | None = None
@@ -30,7 +30,7 @@ class MediaPipeSosDetector:
         try:
             # MediaPipe handedness is most stable on selfie-style frames, which
             # matches the webcam usage pattern from the standalone detector samples.
-            self.tracker = MediaPipeHandTracker(draw_landmarks=False, flip_for_selfie_view=True)
+            self.tracker = MediaPipeHandTracker(draw_landmarks=False, flip_for_selfie_view=True, model_complexity=0 if lightweight else 1)
         except RuntimeError as exc:
             self.tracker = None
             self.tracker_error = str(exc)

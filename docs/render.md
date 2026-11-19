@@ -49,6 +49,20 @@ Camera được trình duyệt gửi lên API; không chạy `run_engine --camer
 
 ## Giới hạn và xử lý lỗi
 
+### AI trên gói 512 MB
+
+Blueprint bật `AI_LOW_MEMORY=true`: không import Ultralytics/PyTorch và không tải
+`bestSOS.pt`; bỏ bộ xác nhận bàn tay riêng của YOLO, tắt FaceMesh refine landmarks,
+và dùng MediaPipe Hands complexity 0 cho SOS. Phát hiện mắt, ngáp, tư thế đầu,
+SOS bằng chuỗi cử chỉ MediaPipe và nút SOS thủ công vẫn được giữ.
+Endpoint hand-tracking độc lập trả 503 với giải thích để tránh tải thêm một model.
+Kết quả `model_sos_label=disabled` biểu thị YOLO bị tắt, không phải mất kết nối.
+
+Sau khi deploy, xác nhận biến `AI_LOW_MEMORY=true` trong Environment và theo dõi RAM
+khi bật camera. Đây là cấu hình giảm tải, chưa phải bảo đảm hoạt động dưới 512 MB
+trên Render. Chất lượng nhận diện cần kiểm tra lại với camera thực tế.
+Local mặc định vẫn chạy đầy đủ; đặt `AI_LOW_MEMORY=false` để bật lại YOLO.
+
 - SQLite, evidence và logs trên gói Free không được lưu bền vững qua restart/deploy.
 - AI dùng PyTorch, MediaPipe và OpenCV có thể vượt RAM của gói Free. Nếu log báo hết bộ nhớ,
   cần chọn gói có RAM phù hợp rồi cập nhật `plan` trong Blueprint tương ứng.

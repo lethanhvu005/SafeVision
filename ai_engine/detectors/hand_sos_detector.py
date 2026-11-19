@@ -8,11 +8,6 @@ from ai_engine.safe_mediapipe import load_mediapipe
 
 mp, _MEDIAPIPE_IMPORT_ERROR, _MEDIAPIPE_IMPORT_NOTE = load_mediapipe()
 
-try:
-    from ultralytics import YOLO
-except Exception:  # noqa: BLE001
-    YOLO = None
-
 
 @dataclass(slots=True)
 class HandPrediction:
@@ -23,7 +18,14 @@ class HandPrediction:
 
 
 class HandSosDetector:
-    def __init__(self, model_path: str, stable_threshold: float = 1.0, confidence_threshold: float = 0.65):
+    def __init__(self, model_path: str, stable_threshold: float = 1.0, confidence_threshold: float = 0.65, enabled: bool = True):
+        self.enabled = enabled
+        YOLO = None
+        if enabled:
+            try:
+                from ultralytics import YOLO
+            except Exception:  # noqa: BLE001
+                pass
         self.model_path = Path(model_path)
         self.stable_threshold = stable_threshold
         self.confidence_threshold = confidence_threshold
@@ -36,7 +38,7 @@ class HandSosDetector:
                 min_detection_confidence=0.45,
                 min_tracking_confidence=0.45,
             )
-            if mp is not None
+            if enabled and mp is not None
             else None
         )
         self.last_positive_at: float | None = None
@@ -120,6 +122,8 @@ class HandSosDetector:
         return hand_boxes
 
     def predict(self, frame) -> HandPrediction:
+        if not self.enabled:
+            return HandPrediction(label='disabled', score=0.0, stable_seconds=0.0)
         label = 'uncertain'
         score = 0.0
         bbox: tuple[float, float, float, float] | None = None

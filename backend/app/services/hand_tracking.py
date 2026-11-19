@@ -51,10 +51,14 @@ class HandTrackingService:
 
 
 _service: HandTrackingService | None = None
+_service_lock = Lock()
 
 
 def get_hand_tracking_service() -> HandTrackingService:
     global _service
-    if _service is None:
-        _service = HandTrackingService()
+    if get_settings().ai_low_memory:
+        raise RuntimeError('Chế độ tiết kiệm RAM đã tắt theo dõi bàn tay độc lập. SOS bằng MediaPipe vẫn hoạt động trong camera giám sát.')
+    with _service_lock:
+        if _service is None:
+            _service = HandTrackingService()
     return _service

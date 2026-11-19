@@ -23,14 +23,14 @@ from ai_engine.detectors.yawn_detector import YawnDetector
 
 
 class FrameProcessor:
-    def __init__(self, sos_model_path: str):
-        self.face_mesh = FaceMesh(max_num_faces=1, refine_landmarks=True) if FaceMesh else None
+    def __init__(self, sos_model_path: str, low_memory: bool = False):
+        self.face_mesh = FaceMesh(max_num_faces=1, refine_landmarks=not low_memory) if FaceMesh else None
         self.face_mesh_error = FACE_MESH_IMPORT_ERROR
         self.eye_detector = EyeDetector()
         self.yawn_detector = YawnDetector()
         self.head_detector = HeadPoseDetector()
-        self.hand_detector = HandSosDetector(sos_model_path)
-        self.mediapipe_sos_detector = MediaPipeSosDetector()
+        self.hand_detector = HandSosDetector(sos_model_path, enabled=not low_memory)
+        self.mediapipe_sos_detector = MediaPipeSosDetector(lightweight=low_memory)
         self.rule_engine = DrowsinessRuleEngine(RuleThresholds())
 
     @staticmethod
