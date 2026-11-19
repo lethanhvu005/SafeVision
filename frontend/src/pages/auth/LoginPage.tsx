@@ -7,6 +7,8 @@ import {
   KeyRound,
   Mail,
   ShieldCheck,
+  Sparkles,
+  UserCheck,
 } from 'lucide-react';
 
 import { apiClient } from '../../api/client';
@@ -39,6 +41,19 @@ export function LoginPage() {
     setEmail(localStorage.getItem(REMEMBER_EMAIL_KEY) ?? '');
     setIsAdmin(localStorage.getItem(REMEMBER_ROLE_KEY) === 'admin');
   }, []);
+
+  function fillDemoAccount(role: 'driver' | 'admin') {
+    setError(null);
+    if (role === 'driver') {
+      setEmail('driver1@example.com');
+      setPassword('Driver@123');
+      setIsAdmin(false);
+    } else {
+      setEmail('admin@driversafe.local');
+      setPassword('Admin@123');
+      setIsAdmin(true);
+    }
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -87,17 +102,41 @@ export function LoginPage() {
     <div className="login-page px-4 py-8 md:px-8">
       <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-7xl items-center gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <section className="login-story">
-          <div className="login-brand"><ShieldCheck size={30} /><span>SafeVision</span></div>
+          <div className="login-brand">
+            <ShieldCheck size={30} />
+            <span>SafeVision</span>
+          </div>
           <span className="login-eyebrow">NGƯỜI BẠN ĐỒNG HÀNH TRÊN MỌI HÀNH TRÌNH</span>
-          <h1>An tâm cầm lái.<br /><span>Vững vàng hành trình.</span></h1>
-          <p>Theo dõi sự tỉnh táo, nhận cảnh báo sớm và kết nối trợ giúp khi bạn cần. Một nơi để chủ động bảo vệ mỗi chuyến đi.</p>
+          <h1>
+            An tâm cầm lái.
+            <br />
+            <span>Vững vàng hành trình.</span>
+          </h1>
+          <p>
+            Theo dõi sự tỉnh táo, nhận cảnh báo sớm và kết nối trợ giúp khi bạn cần. Một nơi để chủ động bảo vệ mỗi chuyến đi.
+          </p>
           <div className="journey-art" aria-hidden="true">
-            <div className="journey-road" /><div className="journey-car"><ShieldCheck size={30} /></div>
+            <div className="journey-road" />
+            <div className="journey-car">
+              <ShieldCheck size={30} />
+            </div>
             <span className="journey-caption">ĐỒNG HÀNH CÙNG BẠN</span>
           </div>
           <div className="login-features">
-            <div><ShieldCheck size={20} /><span><strong>Giám sát bằng AI</strong><small>Phân tích dấu hiệu buồn ngủ qua camera</small></span></div>
-            <div><Fingerprint size={20} /><span><strong>Trợ giúp khẩn cấp</strong><small>Kích hoạt SOS và lưu lịch sử cảnh báo</small></span></div>
+            <div>
+              <ShieldCheck size={20} />
+              <span>
+                <strong>Giám sát bằng AI</strong>
+                <small>Phân tích dấu hiệu buồn ngủ qua camera</small>
+              </span>
+            </div>
+            <div>
+              <Fingerprint size={20} />
+              <span>
+                <strong>Trợ giúp khẩn cấp</strong>
+                <small>Kích hoạt SOS và lưu lịch sử cảnh báo</small>
+              </span>
+            </div>
           </div>
         </section>
 
@@ -106,19 +145,48 @@ export function LoginPage() {
             <div className="rounded-[28px] border border-white/10 bg-[linear-gradient(145deg,#07111f_0%,#10213f_100%)] p-6 text-white">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.28em] text-slate-300">TRUY CẬP HỆ THỐNG</p>
-                  <h1 className="mt-3 font-display text-3xl font-semibold">Đăng nhập</h1>
+                  <p className="text-xs font-bold uppercase tracking-[0.28em] text-teal-300">
+                    TRUY CẬP HỆ THỐNG
+                  </p>
+                  <h1 className="mt-2.5 font-display text-3xl font-bold">Đăng nhập</h1>
                   <p className="mt-2 text-sm text-slate-300">
                     Sử dụng tài khoản người lái hoặc bật chế độ quản trị viên nếu cần.
                   </p>
                 </div>
-                <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-white/10">
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-3xl border border-white/10 bg-white/10">
                   <Fingerprint size={28} />
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 space-y-5">
+            <div className="mt-5 rounded-2xl border border-teal-500/20 bg-teal-500/[0.06] p-3.5">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-teal-700">
+                  <Sparkles size={14} />
+                  Đăng nhập nhanh tài khoản Demo
+                </span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fillDemoAccount('driver')}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-teal-600/25 bg-white px-3 py-1.5 text-xs font-semibold text-teal-800 shadow-sm transition hover:border-teal-600 hover:bg-teal-50"
+                  >
+                    <UserCheck size={13} />
+                    Tài xế Demo
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => fillDemoAccount('admin')}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-400 hover:bg-slate-50"
+                  >
+                    <ShieldCheck size={13} />
+                    Admin Demo
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 space-y-5">
               {error ? (
                 <AlertBanner
                   level={errorLevel}
@@ -128,7 +196,9 @@ export function LoginPage() {
               ) : null}
 
               <div>
-                <label htmlFor="login-email" className="label-shell">Email</label>
+                <label htmlFor="login-email" className="label-shell">
+                  Email
+                </label>
                 <div className="flex items-center rounded-2xl border border-slate-200 bg-white/80 transition focus-within:border-sky-400 focus-within:ring-4 focus-within:ring-sky-500/10">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-400">
                     <Mail size={18} />
@@ -140,14 +210,16 @@ export function LoginPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="driver@example.com"
+                    placeholder="driver1@example.com"
                     autoComplete="username"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="login-password" className="label-shell">Mật khẩu</label>
+                <label htmlFor="login-password" className="label-shell">
+                  Mật khẩu
+                </label>
                 <div className="flex items-center rounded-2xl border border-slate-200 bg-white/80 transition focus-within:border-sky-400 focus-within:ring-4 focus-within:ring-sky-500/10">
                   <span className="flex h-14 w-14 shrink-0 items-center justify-center text-slate-400">
                     <KeyRound size={18} />
@@ -173,8 +245,8 @@ export function LoginPage() {
                 </div>
               </div>
 
-              <div className="grid gap-3 rounded-[28px] border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">
-                <label className="flex items-center gap-3">
+              <div className="grid gap-3 rounded-[24px] border border-slate-200 bg-slate-50/70 p-4 text-sm text-slate-700">
+                <label className="flex cursor-pointer items-center gap-3">
                   <input
                     type="checkbox"
                     checked={isAdmin}
@@ -183,7 +255,7 @@ export function LoginPage() {
                   />
                   Đăng nhập quản trị viên
                 </label>
-                <label className="flex items-center gap-3">
+                <label className="flex cursor-pointer items-center gap-3">
                   <input
                     type="checkbox"
                     checked={rememberLogin}
@@ -197,14 +269,21 @@ export function LoginPage() {
                 </p>
               </div>
 
-              <button disabled={isSubmitting} aria-busy={isSubmitting} className="primary-btn w-full rounded-[24px] py-4 text-base">
-                {isSubmitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
+              <button
+                disabled={isSubmitting}
+                aria-busy={isSubmitting}
+                className="primary-btn w-full rounded-[24px] py-4 text-base shadow-lg shadow-teal-700/20"
+              >
+                {isSubmitting ? 'Đang đăng nhập…' : 'Đăng nhập vào hệ thống'}
               </button>
 
               {!isAdmin ? (
                 <p className="text-center text-sm text-slate-600">
                   Chưa có tài khoản?{' '}
-                  <Link to="/register" className="font-semibold text-ink underline-offset-4 hover:underline">
+                  <Link
+                    to="/register"
+                    className="font-semibold text-teal-700 underline-offset-4 hover:underline"
+                  >
                     Đăng ký ngay
                   </Link>
                 </p>

@@ -292,29 +292,29 @@ function formatGestureLabel(label: SosGestureLabel) {
 function formatSosSource(source?: string) {
   switch (source) {
     case 'model':
-      return 'Mo hinh SOS';
+      return 'Mô hình SOS';
     case 'mediapipe':
       return 'MediaPipe Hands';
     case 'model+mediapipe':
-      return 'Mo hinh + MediaPipe';
+      return 'Mô hình + MediaPipe';
     default:
-      return 'Chua xac dinh';
+      return 'Chưa xác định';
   }
 }
 
 function formatMediaPipeStage(stage?: number, label?: string) {
   if (label === 'sos_detection') {
-    return 'SOS DETECTION';
+    return 'PHÁT HIỆN SOS';
   }
   switch (stage) {
     case 1:
-      return 'Stage 1 - all fingers open';
+      return 'Bước 1 - Mở bàn tay';
     case 2:
-      return 'Stage 2 - thumb folded';
+      return 'Bước 2 - Gập ngón cái';
     case 3:
-      return 'Stage 3 - fingers cover thumb';
+      return 'Bước 3 - Nắm bàn tay';
     default:
-      return 'No stage';
+      return 'Chờ cử chỉ';
   }
 }
 
@@ -733,14 +733,14 @@ export function DashboardPage() {
 
     lastMediaPipeSosAtRef.current = now;
     if (soundEnabled) {
-      playSosVoice('Da phat hien SOS tu MediaPipe Hands.');
+      playSosVoice('Đã phát hiện SOS từ MediaPipe Hands.');
     }
 
     void handleSos({
       triggerType: 'hand_gesture',
       note:
-        'SOS kich hoat tu MediaPipe Hands theo chuoi stage 1-2-3-2 trong duoi 3 giay.',
-      successMessage: 'Da gui SOS tu MediaPipe Hands.',
+        'SOS kích hoạt từ MediaPipe Hands theo chuỗi cử chỉ 1-2-3-2 trong dưới 3 giây.',
+      successMessage: 'Đã gửi SOS từ MediaPipe Hands.',
     });
   }, [aiState.mediapipe_sos_triggered, soundEnabled]);
 
@@ -1525,11 +1525,11 @@ export function DashboardPage() {
         }}
         sosLoading={isSendingSos}
         sosEmergency={hasDangerAlert || sosEmergencyActive}
-        mirrorVideo
+        mirrorVideo cameraActive={cameraReady} onStartCamera={() => { void startCamera(); }}
         mirroredOverlay={cameraReady ? <LiveHandSkeleton videoRef={videoRef} /> : null}
         footer={cameraFooter}
         overlay={
-          <div className="pointer-events-none absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-[24px] border border-white/10 bg-slate-950/60 px-4 py-3 text-white backdrop-blur">
+          <div className={cx('pointer-events-none absolute left-4 top-4 max-w-[calc(100%-2rem)] rounded-[24px] border border-white/10 bg-slate-950/60 px-4 py-3 text-white backdrop-blur transition-opacity', cameraReady ? 'opacity-100' : 'opacity-0')}>
             <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-300">
               Nhận diện cử chỉ SOS
             </p>
@@ -1719,7 +1719,7 @@ export function DashboardPage() {
                 <span className="font-semibold text-ink">
                   {aiState.mediapipe_sos_label && aiState.mediapipe_sos_label !== 'unavailable'
                     ? `${formatMediaPipeStage(aiState.mediapipe_sos_stage, aiState.mediapipe_sos_label)} (${(aiState.mediapipe_sos_stable_seconds ?? 0).toFixed(1)}s)`
-                    : 'Chua co tin hieu'}
+                    : 'Chưa có tín hiệu'}
                 </span>
               </div>
               <div className="flex items-center justify-between rounded-2xl bg-slate-50/80 px-4 py-3">
