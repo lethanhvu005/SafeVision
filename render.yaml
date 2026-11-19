@@ -1,0 +1,44 @@
+# Demo deployment: SQLite on the free service is ephemeral.
+# Set the two public URLs when creating the Blueprint, then verify them
+# against the actual URLs Render assigns. See docs/render.md.
+services:
+  - type: web
+    name: safevision-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./docker/render.Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        value: sqlite:///./storage/db/driversafe.db
+      - key: STORAGE_PATH
+        value: storage
+      - key: SOS_MODEL_PATH
+        value: bestSOS.pt
+      - key: FRONTEND_ORIGIN
+        sync: false
+      - key: OMP_NUM_THREADS
+        value: "1"
+      - key: OPENBLAS_NUM_THREADS
+        value: "1"
+
+  - type: web
+    name: safevision-web
+    runtime: static
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: VITE_API_BASE_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html

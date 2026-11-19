@@ -1,0 +1,58 @@
+[
+  {
+    "region_code": "HCM_CENTER",
+    "region_name": "TP.HCM - Khu vuc trung tam",
+    "agency_name": "Cong an giao thong TP.HCM",
+    "email": "csgt-hcm@example.com",
+    "phone": "02838222222",
+    "lat_min": 10.68,
+    "lat_max": 10.86,
+    "lon_min": 106.62,
+    "lon_max": 106.82,
+    "polygon_geojson": null,
+    "is_default": false,
+    "is_active": true
+  },
+  {
+    "region_code": "HN_CORE",
+    "region_name": "Ha Noi - Noi thanh",
+    "agency_name": "Cong an giao thong Ha Noi",
+    "email": "csgt-hn@example.com",
+    "phone": "02439424444",
+    "lat_min": 20.95,
+    "lat_max": 21.15,
+    "lon_min": 105.74,
+    "lon_max": 105.95,
+    "polygon_geojson": null,
+    "is_default": false,
+    "is_active": true
+  },
+  {
+    "region_code": "DANANG",
+    "region_name": "Da Nang",
+    "agency_name": "Cong an giao thong Da Nang",
+    "email": "lethanhvu005@gmail.com",
+    "phone": "02363822222",
+    "lat_min": 15.97,
+    "lat_max": 16.15,
+    "lon_min": 108.10,
+    "lon_max": 108.32,
+    "polygon_geojson": null,
+    "is_default": false,
+    "is_active": true
+  },
+  {
+    "region_code": "DEFAULT",
+    "region_name": "Agency du phong toan quoc",
+    "agency_name": "Trung tam tiep nhan SOS toan quoc",
+    "email": "default-agency@example.com",
+    "phone": "19001000",
+    "lat_min": null,
+    "lat_max": null,
+    "lon_min": null,
+    "lon_max": null,
+    "polygon_geojson": null,
+    "is_default": true,
+    "is_active": true
+  }
+]

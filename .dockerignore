@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+**/.venv*
+**/__pycache__
+**/node_modules
+**/dist
+.pytest_cache
+.vscode
+storage/db
+storage/logs
+storage/evidence
+frontend
+matplotlib
